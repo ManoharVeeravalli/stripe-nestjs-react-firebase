@@ -6,6 +6,8 @@ import {
   HttpCode,
   Get,
   UseGuards,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { StripeService } from './stripe.service';
@@ -47,6 +49,35 @@ export class StripeController {
   @Post('wallet')
   @UseGuards(AuthGuard('firebase-auth'))
   async setWallet(@FirebaseUser() user: firebase.auth.UserRecord) {
-    return this.stripeService.createSetupIntent(user.uid);
+    return await this.stripeService.createSetupIntent(user.uid);
+  }
+
+  @Post('subscriptions')
+  @UseGuards(AuthGuard('firebase-auth'))
+  async createSubscription(
+    @Body('plan') plan: string,
+    @Body('payment_method') payment_method: string,
+    @FirebaseUser() user: firebase.auth.UserRecord,
+  ) {
+    return await this.stripeService.createSubscription(
+      user.uid,
+      plan,
+      payment_method,
+    );
+  }
+
+  @Get('subscriptions')
+  @UseGuards(AuthGuard('firebase-auth'))
+  async listSubscriptions(@FirebaseUser() user: firebase.auth.UserRecord) {
+    return await this.stripeService.listSubscriptions(user.uid);
+  }
+
+  @Patch('subscriptions/:id')
+  @UseGuards(AuthGuard('firebase-auth'))
+  async cancelSubscription(
+    @FirebaseUser() user: firebase.auth.UserRecord,
+    @Param('id') id: string,
+  ) {
+    return await this.stripeService.cancelSubscription(user.uid, id);
   }
 }
