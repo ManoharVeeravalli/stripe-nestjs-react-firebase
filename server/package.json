@@ -5,6 +5,10 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -28,6 +32,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "dotenv": "^10.0.0",
     "firebase-admin": "^9.9.0",
+    "firebase-functions": "^3.14.1",
     "passport": "^0.4.1",
     "passport-firebase-jwt": "^1.0.0",
     "reflect-metadata": "^0.1.13",
